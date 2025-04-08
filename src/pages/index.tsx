@@ -1,58 +1,55 @@
 import { Link } from "@heroui/link";
-import { Snippet } from "@heroui/snippet";
-import { Code } from "@heroui/code";
-import { button as buttonStyles } from "@heroui/theme";
+import { Card, CardBody, CardHeader } from "@heroui/card";
 
-import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { GithubIcon } from "@/components/icons";
 import HomeLayout from "@/layouts/home";
+
+const cards = [
+  { title: "Temperature", emoji: "🌡️", path: "/temperature" },
+  { title: "CO2", emoji: "🏭", path: "/co2" },
+  { title: "Methane", emoji: "💨", path: "/methane" },
+  { title: "Nitrous Oxide", emoji: "🧪", path: "/nitrous-oxide" },
+  { title: "Polar Ice", emoji: "🧊", path: "/polar-ice" },
+];
 
 export default function IndexPage() {
   return (
     <HomeLayout>
-      <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-        <div className="inline-block max-w-lg text-center justify-center">
-          <span className={title()}>Make&nbsp;</span>
-          <span className={title({ color: "violet" })}>beautiful&nbsp;</span>
-          <br />
-          <span className={title()}>
-            websites regardless of your design experience.
-          </span>
-          <div className={subtitle({ class: "mt-4" })}>
-            Beautiful, fast and modern React UI library.
-          </div>
+      <section className="flex flex-col items-center justify-center gap-8 py-10 px-4">
+        {/* Header */}
+        <div className="inline-block max-w-2xl text-center justify-center">
+          <h1 className={title()}>
+            Welcome to <span className="text-green-600">GreenPulse</span>
+          </h1>
+          <p className={subtitle({ class: "mt-4" })}>
+            Explore global warming through real-world data. Choose a metric
+            below to begin.
+          </p>
         </div>
 
-        <div className="flex gap-3">
-          <Link
-            isExternal
-            className={buttonStyles({
-              color: "primary",
-              radius: "full",
-              variant: "shadow",
-            })}
-            href={siteConfig.links.docs}
-          >
-            Documentation
-          </Link>
-          <Link
-            isExternal
-            className={buttonStyles({ variant: "bordered", radius: "full" })}
-            href={siteConfig.links.github}
-          >
-            <GithubIcon size={20} />
-            GitHub
-          </Link>
-        </div>
-
-        <div className="mt-8">
-          <Snippet hideCopyButton hideSymbol variant="bordered">
-            <span>
-              Get started by editing{" "}
-              <Code color="primary">pages/index.tsx</Code>
-            </span>
-          </Snippet>
+        {/* Card Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+          {cards.map((card) => (
+            <Link key={card.title} className="h-full" href={card.path}>
+              <Card
+                isHoverable
+                className="h-full transition-shadow hover:shadow-lg cursor-pointer"
+              >
+                <CardHeader className="text-xl font-semibold">
+                  <span aria-label={card.title} role="img">
+                    {card.emoji}
+                  </span>{" "}
+                  {card.title}
+                </CardHeader>
+                <CardBody>
+                  <p className="text-sm text-default-500">
+                    View historical data and climate trends for{" "}
+                    {card.title.toLowerCase()}.
+                  </p>
+                </CardBody>
+              </Card>
+            </Link>
+          ))}
         </div>
       </section>
     </HomeLayout>

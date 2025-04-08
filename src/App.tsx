@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import IndexPage from "@/pages/index";
-import TemperaturesPage from "@/pages/temperatures";
+import TemperaturesPage from "@/pages/Temperature";
 import CO2Page from "@/pages/CO2";
 import MethanePage from "@/pages/methane";
 import PolarIcePage from "@/pages/polarIce";

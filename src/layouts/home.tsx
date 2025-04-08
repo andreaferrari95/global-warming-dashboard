@@ -17,8 +17,9 @@ export default function HomeLayout({
         <Link
           isExternal
           className="flex items-center gap-1 text-current"
-          href="https://heroui.com"
-          title="heroui.com homepage"
+          href="https://github.com/andreaferrari95"
+          target="_blank"
+          title="Andrea Ferrari GitHub"
         >
           <span className="text-default-600">Developed By</span>
           <p className="text-primary">Andrea Ferrari</p>
