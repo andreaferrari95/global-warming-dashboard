@@ -4,6 +4,7 @@ import { Card, CardBody, CardHeader } from "@heroui/card";
 import { useCachedData } from "@/utils/useCachedData";
 import HomeLayout from "@/layouts/home";
 import Header from "@/components/Header";
+import WeatherWidget from "@/components/WeatherWidget";
 import { getTemperatureData } from "@/api/temperature";
 import { getCo2Data } from "@/api/co2";
 import { getMethaneData } from "@/api/methane";
@@ -100,8 +101,9 @@ const cardConfig: DashboardCard[] = [
 export default function IndexPage() {
   return (
     <HomeLayout>
-      <section className="flex flex-col items-center justify-center gap-8 py-10 px-4">
+      <section className="flex flex-col items-center justify-center gap-6  px-4">
         <Header />
+        <WeatherWidget />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
           {cardConfig.map((card) => {
