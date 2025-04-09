@@ -18,7 +18,7 @@ import { GithubIcon, LinkedInIcon } from "@/components/icons";
 export const Navbar = () => {
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+      <NavbarContent className="basis-1/5 sm:basis-full" justify="center">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
             className="flex justify-start items-center gap-1"
@@ -27,7 +27,7 @@ export const Navbar = () => {
           >
             <img
               alt="GreenPulse logo"
-              className="h-6 w-auto"
+              className="h-8 w-auto"
               src="/logo/Logo.png"
             />
             <p className="font-bold text-inherit">
@@ -84,8 +84,9 @@ export const Navbar = () => {
             <Link
               className={clsx(
                 linkStyles({ color: "foreground" }),
-                "w-full px-4 py-2 rounded-md transition-colors hover:bg-default-100",
-                "data-[active=true]:text-primary data-[active=true]:font-medium",
+                "w-full block py-2 text-lg",
+                "data-[active=true]:text-primary",
+                "data-[active=true]:font-semibold",
               )}
               color="foreground"
               href={item.href}
