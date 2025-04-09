@@ -13,7 +13,7 @@ export const siteConfig = {
       href: "/temperatures",
     },
     {
-      label: "CO2",
+      label: "CO₂",
       href: "/CO2",
     },
     {
@@ -21,8 +21,8 @@ export const siteConfig = {
       href: "/methane",
     },
     {
-      label: "NO2",
-      href: "/NO2",
+      label: "Nitrous Oxide (N₂O)",
+      href: "/Nitrous-Oxide",
     },
     {
       label: "Polar Ice",
@@ -43,7 +43,7 @@ export const siteConfig = {
       href: "/temperatures",
     },
     {
-      label: "CO2",
+      label: "CO₂",
       href: "/CO2",
     },
     {
@@ -51,8 +51,8 @@ export const siteConfig = {
       href: "/methane",
     },
     {
-      label: "NO2",
-      href: "/NO2",
+      label: "Nitrous Oxide (N₂O)",
+      href: "/Nitrous-Oxide",
     },
     {
       label: "Polar Ice",
