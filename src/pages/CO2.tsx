@@ -221,7 +221,7 @@ export default function Co2Page() {
                     dataKey="trend"
                     dot={false}
                     stroke="#ef4444"
-                    strokeWidth={2}
+                    strokeWidth={3}
                     type="monotone"
                   />
                   <Line

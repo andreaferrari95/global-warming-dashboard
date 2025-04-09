@@ -109,7 +109,9 @@ export default function TemperaturesPage() {
             {/* Title + Description + Latest Value */}
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-4">
               <div>
-                <h2 className="text-lg font-semibold">
+                <h2
+                  className={`text-lg font-semibold ${type === "land" ? "text-green-600" : "text-blue-600"}`}
+                >
                   {type === "land" ? "Land" : "Ocean"} Temperature Anomalies
                   (°C)
                 </h2>
