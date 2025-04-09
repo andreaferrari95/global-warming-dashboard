@@ -93,6 +93,7 @@ export default function TemperaturesPage() {
       link.click();
     }
   };
+  const period = type === "land" ? "monthly" : "yearly";
 
   return (
     <HomeLayout>
@@ -113,10 +114,10 @@ export default function TemperaturesPage() {
                   (°C)
                 </h2>
                 <p className="text-sm text-default-500 mt-1 max-w-md">
-                  This chart shows how global{" "}
-                  {type === "land" ? "land" : "ocean"} temperatures have
-                  deviated from long-term historical averages. Data is monthly
-                  and anomalies are in °C.
+                  This chart shows how global {type} temperatures have deviated
+                  from long-term historical averages. Data is{" "}
+                  <span className="font-medium">{period}</span> and anomalies
+                  are in °C.
                 </p>
               </div>
               {latestValue !== null && (
