@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { Link } from "@heroui/link";
 import {
   Navbar as HeroUINavbar,
@@ -16,9 +17,12 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { GithubIcon, LinkedInIcon } from "@/components/icons";
 
 export const Navbar = () => {
+  const location = useLocation();
+
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="center">
+      {/* LEFT: Logo */}
+      <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand className="gap-3 max-w-fit">
           <Link
             className="flex justify-start items-center gap-1"
@@ -30,19 +34,25 @@ export const Navbar = () => {
               className="h-8 w-auto"
               src="/logo/Logo.png"
             />
-            <p className="font-bold text-inherit">
+            <p className="font-bold text-inherit text-xl">
               Green <span className="text-green-600 font-bold">Pulse</span>
             </p>
           </Link>
         </NavbarBrand>
-        <div className="hidden lg:flex gap-4 justify-start ml-2">
-          {siteConfig.navItems.map((item) => (
+      </NavbarContent>
+
+      {/* CENTER: Nav links */}
+      <NavbarContent className="hidden lg:flex gap-6" justify="center">
+        {siteConfig.navItems.map((item) => {
+          const isActive = location.pathname === item.href;
+
+          return (
             <NavbarItem key={item.href}>
               <Link
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary",
-                  "data-[active=true]:font-medium",
+                  "px-3 py-1 rounded-md transition-colors",
+                  isActive && " text-green-600 font-semibold",
                 )}
                 color="foreground"
                 href={item.href}
@@ -50,10 +60,11 @@ export const Navbar = () => {
                 {item.label}
               </Link>
             </NavbarItem>
-          ))}
-        </div>
+          );
+        })}
       </NavbarContent>
 
+      {/* RIGHT: Icons */}
       <NavbarContent
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
@@ -68,6 +79,8 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
       </NavbarContent>
+
+      {/* Mobile: Icons + Menu */}
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         <Link isExternal href={siteConfig.links.linkedin}>
           <LinkedInIcon className="text-default-500" />
@@ -78,23 +91,28 @@ export const Navbar = () => {
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
+
+      {/* Mobile Menu */}
       <NavbarMenu className="backdrop-blur-md bg-white/20 dark:bg-black/20">
-        {siteConfig.navItems.map((item) => (
-          <NavbarMenuItem key={item.href}>
-            <Link
-              className={clsx(
-                linkStyles({ color: "foreground" }),
-                "w-full block py-2 text-lg",
-                "data-[active=true]:text-primary",
-                "data-[active=true]:font-semibold",
-              )}
-              color="foreground"
-              href={item.href}
-            >
-              {item.label}
-            </Link>
-          </NavbarMenuItem>
-        ))}
+        {siteConfig.navItems.map((item) => {
+          const isActive = location.pathname === item.href;
+
+          return (
+            <NavbarMenuItem key={item.href}>
+              <Link
+                className={clsx(
+                  linkStyles({ color: "foreground" }),
+                  "w-full block py-2 text-lg px-3 rounded-md transition-colors",
+                  isActive && "text-green-600 font-semibold",
+                )}
+                color="foreground"
+                href={item.href}
+              >
+                {item.label}
+              </Link>
+            </NavbarMenuItem>
+          );
+        })}
       </NavbarMenu>
     </HeroUINavbar>
   );
