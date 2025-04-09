@@ -3,6 +3,8 @@ import {
   Navbar as HeroUINavbar,
   NavbarBrand,
   NavbarContent,
+  NavbarMenu,
+  NavbarMenuItem,
   NavbarItem,
   NavbarMenuToggle,
 } from "@heroui/navbar";
@@ -67,12 +69,32 @@ export const Navbar = () => {
         </NavbarItem>
       </NavbarContent>
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+        <Link isExternal href={siteConfig.links.linkedin}>
+          <LinkedInIcon className="text-default-500" />
+        </Link>
         <Link isExternal href={siteConfig.links.github}>
           <GithubIcon className="text-default-500" />
         </Link>
         <ThemeSwitch />
         <NavbarMenuToggle />
       </NavbarContent>
+      <NavbarMenu className="backdrop-blur-md bg-white/20 dark:bg-black/20">
+        {siteConfig.navItems.map((item) => (
+          <NavbarMenuItem key={item.href}>
+            <Link
+              className={clsx(
+                linkStyles({ color: "foreground" }),
+                "w-full px-4 py-2 rounded-md transition-colors hover:bg-default-100",
+                "data-[active=true]:text-primary data-[active=true]:font-medium",
+              )}
+              color="foreground"
+              href={item.href}
+            >
+              {item.label}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </HeroUINavbar>
   );
 };

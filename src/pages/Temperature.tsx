@@ -166,7 +166,7 @@ export default function TemperaturesPage() {
                 size="sm"
                 startContent={<DownloadIcon size={16} />}
                 variant="bordered"
-                onClick={handleExport}
+                onPress={handleExport}
               >
                 Export PNG
               </Button>
