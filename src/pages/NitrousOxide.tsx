@@ -124,7 +124,7 @@ export default function NitrousPage() {
               <Select
                 className="w-[150px] text-gray-800"
                 label="Starting year"
-                selectedKeys={[selectedKey]}
+                selectedKeys={[selectedKey]} // ✅ makes the selection persist visually
                 size="sm"
                 variant="bordered"
                 onSelectionChange={(keys) => {
@@ -136,18 +136,21 @@ export default function NitrousPage() {
                   }
                 }}
               >
-                {[...Array(25)].map((_, i) => {
-                  const year = 2002 + i;
+                {Array.from(
+                  { length: new Date().getFullYear() - 2002 + 1 },
+                  (_, i) => {
+                    const year = 2002 + i;
 
-                  return (
-                    <SelectItem
-                      key={year.toString()}
-                      textValue={year.toString()}
-                    >
-                      {year}
-                    </SelectItem>
-                  );
-                })}
+                    return (
+                      <SelectItem
+                        key={year.toString()}
+                        textValue={year.toString()}
+                      >
+                        {year}
+                      </SelectItem>
+                    );
+                  },
+                )}
               </Select>
             </div>
 

@@ -137,7 +137,7 @@ export default function MethanePage() {
               <Select
                 className="w-[150px] text-gray-800"
                 label="Starting year"
-                selectedKeys={[selectedKey]} // ✅ controlled
+                selectedKeys={[selectedKey]}
                 size="sm"
                 variant="bordered"
                 onSelectionChange={(keys) => {
@@ -149,18 +149,21 @@ export default function MethanePage() {
                   }
                 }}
               >
-                {[...Array(40)].map((_, i) => {
-                  const year = 1985 + i;
+                {Array.from(
+                  { length: new Date().getFullYear() - 1985 + 1 },
+                  (_, i) => {
+                    const year = 1985 + i;
 
-                  return (
-                    <SelectItem
-                      key={year.toString()}
-                      textValue={year.toString()}
-                    >
-                      {year}
-                    </SelectItem>
-                  );
-                })}
+                    return (
+                      <SelectItem
+                        key={year.toString()}
+                        textValue={year.toString()}
+                      >
+                        {year}
+                      </SelectItem>
+                    );
+                  },
+                )}
               </Select>
             </div>
 

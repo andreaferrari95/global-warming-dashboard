@@ -139,18 +139,21 @@ export default function Co2Page() {
                   }
                 }}
               >
-                {[...Array(10)].map((_, i) => {
-                  const year = 2015 + i;
+                {Array.from(
+                  { length: new Date().getFullYear() - 2015 + 1 },
+                  (_, i) => {
+                    const year = 2015 + i;
 
-                  return (
-                    <SelectItem
-                      key={year.toString()}
-                      textValue={year.toString()}
-                    >
-                      {year}
-                    </SelectItem>
-                  );
-                })}
+                    return (
+                      <SelectItem
+                        key={year.toString()}
+                        textValue={year.toString()}
+                      >
+                        {year}
+                      </SelectItem>
+                    );
+                  },
+                )}
               </Select>
             </div>
 
