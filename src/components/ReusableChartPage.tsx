@@ -25,8 +25,8 @@ interface ChartEntry {
 interface ReusableChartPageProps {
   title: string;
   description: string;
-  fetchData: () => Promise<any[]>;
-  formatData: (raw: any[]) => ChartEntry[];
+  fetchData: () => Promise<any>;
+  formatData: (raw: any) => ChartEntry[];
   yUnit: string;
   yDomain?: [number, number];
   getLatestText: (latest: ChartEntry) => React.ReactNode;
