@@ -4,7 +4,7 @@ import HomeLayout from "@/layouts/home";
 export default function AboutPage() {
   return (
     <HomeLayout>
-      <section className="flex flex-col items-center justify-center gap-8 px-4 py-10">
+      <section className="flex flex-col items-center justify-center gap-8 px-4 ">
         {/* Hero Section */}
         <div className="text-center max-w-3xl space-y-4">
           <h1 className={title()}>
@@ -76,16 +76,16 @@ export default function AboutPage() {
               📧{" "}
               <a
                 className="text-green-500 hover:underline"
-                href="mailto:your.email@example.com"
+                href="mailto:andreaferraridev@gmail.com"
               >
-                your.email@example.com
+                andreaferraridev@gmail.com
               </a>
             </li>
             <li>
               💼{" "}
               <a
                 className="text-green-500 hover:underline"
-                href="https://www.linkedin.com/in/yourprofile"
+                href="https://www.linkedin.com/in/andrea-ferrari-developer/"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -96,7 +96,7 @@ export default function AboutPage() {
               💻{" "}
               <a
                 className="text-green-500 hover:underline"
-                href="https://github.com/yourusername"
+                href="https://github.com/andreaferrari95/"
                 rel="noreferrer"
                 target="_blank"
               >
