@@ -115,7 +115,7 @@ export default function IndexPage() {
             <div className="flex-1 mb-8 sm:mb-0">
               <Header />
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden sm:block py-5">
               <WeatherWidget />
             </div>
           </div>

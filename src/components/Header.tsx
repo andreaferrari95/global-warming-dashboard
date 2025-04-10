@@ -8,8 +8,9 @@ export default function Header() {
         Welcome to <span className="text-green-600">GreenPulse</span>
       </h1>
       <p className={subtitle({ class: "mt-4" })}>
-        Explore global warming through real-world data. Choose a metric below to
-        begin.
+        Dive into the planet&apos;s vital signs — explore climate trends through
+        real-time data and discover the story the Earth is telling. 🌍📊 <br />
+        Choose a topic to explore the trends.
       </p>
     </div>
   );
