@@ -4,7 +4,7 @@ import IndexPage from "@/pages/index";
 import TemperaturesPage from "@/pages/Temperature";
 import CO2Page from "@/pages/CO2";
 import MethanePage from "@/pages/methane";
-import PolarIcePage from "@/pages/PolarIce";
+import PolarIcePage from "@/pages/polarIce";
 import NitrousPage from "@/pages/NitrousOxide";
 import AboutPage from "@/pages/about";
 
