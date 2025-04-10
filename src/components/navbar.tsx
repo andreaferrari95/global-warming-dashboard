@@ -93,7 +93,7 @@ export const Navbar = () => {
       </NavbarContent>
 
       {/* Mobile Menu */}
-      <NavbarMenu className="backdrop-blur-md bg-white/20 dark:bg-black/20">
+      <NavbarMenu className="backdrop-blur-md z-50 bg-white/20 dark:bg-black/20">
         {siteConfig.navItems.map((item) => {
           const isActive = location.pathname === item.href;
 

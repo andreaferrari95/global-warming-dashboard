@@ -22,7 +22,7 @@ export default function HomeLayout({
           title="Andrea Ferrari GitHub"
         >
           <span className="text-default-600">Developed By</span>
-          <p className="text-primary">Andrea Ferrari</p>
+          <p className="text-green-600">Andrea Ferrari</p>
         </Link>
       </footer>
     </div>
