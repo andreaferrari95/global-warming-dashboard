@@ -12,6 +12,7 @@ import {
 } from "@heroui/react";
 import { SearchIcon, LocateIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Skeleton } from "@heroui/skeleton";
 
 import { getCachedWeather } from "@/utils/useCachedWeather";
 
@@ -81,7 +82,10 @@ export default function WeatherWidget() {
           <div className="text-sm">
             <p className="font-medium text-default-700">Weather</p>
             {loading ? (
-              <p className="text-xs text-default-500">Loading...</p>
+              <div className="flex flex-col items-center gap-1">
+                <Skeleton className="h-4 w-[120px] rounded-md" />
+                <Skeleton className="h-3 w-[100px] rounded-md" />
+              </div>
             ) : weather ? (
               <>
                 <AnimatePresence mode="wait">
@@ -157,13 +161,27 @@ export default function WeatherWidget() {
               </Button>
             </div>
 
-            {weather ? (
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {Array.from({ length: 7 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="border-2 border-default-200 rounded-xl p-4 flex flex-col items-center gap-2"
+                  >
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-10 w-10 rounded-full" />
+                    <Skeleton className="h-3 w-24" />
+                    <Skeleton className="h-3 w-20" />
+                  </div>
+                ))}
+              </div>
+            ) : weather ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {weather.forecast.map((day, i) => (
                   <motion.div
                     key={i}
                     animate={{ opacity: 1, y: 0 }}
-                    className="border-2 border-default-200 rounded-xl p-4 flex flex-col items-center text-center "
+                    className="border-2 border-default-200 rounded-xl p-4 flex flex-col items-center text-center"
                     initial={{ opacity: 0, y: 20 }}
                     transition={{ delay: i * 0.05, duration: 0.3 }}
                   >

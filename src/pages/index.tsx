@@ -1,5 +1,6 @@
 import { Link } from "@heroui/link";
 import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Skeleton } from "@heroui/skeleton";
 import { motion } from "framer-motion";
 
 import { useCachedData } from "@/utils/useCachedData";
@@ -103,7 +104,7 @@ export default function IndexPage() {
   return (
     <HomeLayout>
       <section className="flex flex-col items-center justify-center gap-8 px-4">
-        {/* Header + Weather */}
+        {/* Header + Weather Widget */}
         <div className="w-full max-w-5xl flex flex-col sm:flex-row justify-between items-center sm:items-start gap-4">
           <div className="flex-1 mb-8 sm:mb-0">
             <Header />
@@ -121,9 +122,7 @@ export default function IndexPage() {
           variants={{
             hidden: {},
             visible: {
-              transition: {
-                staggerChildren: 0.1,
-              },
+              transition: { staggerChildren: 0.1 },
             },
           }}
         >
@@ -154,11 +153,15 @@ export default function IndexPage() {
                       <p className="text-sm text-default-500">
                         {card.description}
                       </p>
-                      {card.useLiveData && (
-                        <p className="text-xs text-default-700 font-medium min-h-[20px]">
-                          {live ?? "Loading..."}
-                        </p>
-                      )}
+                      {card.useLiveData ? (
+                        live ? (
+                          <p className="text-xs text-default-700 font-medium min-h-[20px]">
+                            {live}
+                          </p>
+                        ) : (
+                          <Skeleton className="h-4 w-1/2 rounded-md" />
+                        )
+                      ) : null}
                     </CardBody>
                   </Card>
                 </Link>
