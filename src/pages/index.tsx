@@ -1,5 +1,6 @@
 import { Link } from "@heroui/link";
 import { Card, CardBody, CardHeader } from "@heroui/card";
+import { motion } from "framer-motion";
 
 import { useCachedData } from "@/utils/useCachedData";
 import HomeLayout from "@/layouts/home";
@@ -101,47 +102,70 @@ const cardConfig: DashboardCard[] = [
 export default function IndexPage() {
   return (
     <HomeLayout>
-      <section className="flex flex-col items-center justify-center gap-6 px-4">
-        {/* Header and Weather side-by-side on larger screens */}
-        <div className="w-full max-w-5xl flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 items-center text-center">
-          <Header />
+      <section className="flex flex-col items-center justify-center gap-8 px-4">
+        {/* Header + Weather */}
+        <div className="w-full max-w-5xl flex flex-col sm:flex-row justify-between items-center sm:items-start gap-4">
+          <div className="flex-1 mb-8 sm:mb-0">
+            <Header />
+          </div>
           <div className="hidden sm:block">
             <WeatherWidget />
           </div>
         </div>
 
-        {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+        {/* Animated Dashboard Cards */}
+        <motion.div
+          animate="visible"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl py-10"
+          initial="hidden"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.1,
+              },
+            },
+          }}
+        >
           {cardConfig.map((card) => {
             const live = card.useLiveData?.();
 
             return (
-              <Link key={card.title} className="h-full" href={card.path}>
-                <Card
-                  isHoverable
-                  className="h-full transition-shadow hover:shadow-lg cursor-pointer"
-                >
-                  <CardHeader className="text-xl font-semibold">
-                    <span aria-label={card.title} role="img">
-                      {card.emoji}
-                    </span>{" "}
-                    {card.title}
-                  </CardHeader>
-                  <CardBody className="space-y-2">
-                    <p className="text-sm text-default-500">
-                      {card.description}
-                    </p>
-                    {card.useLiveData && (
-                      <p className="text-xs text-default-700 font-medium">
-                        {live ?? "Loading..."}
+              <motion.div
+                key={card.title}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+              >
+                <Link className="h-full flex" href={card.path}>
+                  <Card
+                    isHoverable
+                    className="h-full flex-1 min-w-0 rounded-xl shadow-md transition-all duration-200 border-2 border-default-200 hover:shadow-xl hover:scale-[1.02] hover:bg-white/5 cursor-pointer"
+                  >
+                    <CardHeader className="text-xl font-semibold">
+                      <span aria-label={card.title} role="img">
+                        {card.emoji}
+                      </span>{" "}
+                      {card.title}
+                    </CardHeader>
+                    <CardBody className="space-y-2 h-[100px] flex flex-col justify-between">
+                      <p className="text-sm text-default-500">
+                        {card.description}
                       </p>
-                    )}
-                  </CardBody>
-                </Card>
-              </Link>
+                      {card.useLiveData && (
+                        <p className="text-xs text-default-700 font-medium min-h-[20px]">
+                          {live ?? "Loading..."}
+                        </p>
+                      )}
+                    </CardBody>
+                  </Card>
+                </Link>
+              </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </section>
     </HomeLayout>
   );

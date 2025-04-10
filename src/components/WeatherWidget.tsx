@@ -11,6 +11,7 @@ import {
   Input,
 } from "@heroui/react";
 import { SearchIcon, LocateIcon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { getCachedWeather } from "@/utils/useCachedWeather";
 
@@ -75,7 +76,7 @@ export default function WeatherWidget() {
   return (
     <>
       {/* Inline Mini Widget */}
-      <Card className="bg-transparent shadow-none w-auto p-0 ml-auto border-2 border-default-200 p py-2 px-2">
+      <Card className="bg-transparent shadow-none w-auto p-0 ml-auto border-2 border-default-200 rounded-xl px-3 py-2">
         <CardBody className="flex flex-col items-center text-center gap-2 p-0">
           <div className="text-sm">
             <p className="font-medium text-default-700">Weather</p>
@@ -83,14 +84,27 @@ export default function WeatherWidget() {
               <p className="text-xs text-default-500">Loading...</p>
             ) : weather ? (
               <>
-                <p className="text-sm font-semibold flex items-center justify-center gap-1">
-                  {weather.city} – {weather.current.temp}°C
-                  <img
-                    alt="icon"
-                    className="inline w-5 h-5"
-                    src={`https://www.weatherbit.io/static/img/icons/${weather.current.icon}.png`}
-                  />
-                </p>
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={`${weather.city}-${weather.current.temp}`}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm font-semibold flex items-center justify-center gap-1"
+                    exit={{ opacity: 0, y: -8 }}
+                    initial={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {weather.city} – {weather.current.temp}°C
+                    <motion.img
+                      key={weather.current.icon}
+                      alt="icon"
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="inline w-5 h-5"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      src={`https://www.weatherbit.io/static/img/icons/${weather.current.icon}.png`}
+                      transition={{ duration: 0.3 }}
+                    />
+                  </motion.p>
+                </AnimatePresence>
                 <p className="text-xs text-default-500">
                   {weather.current.description}
                 </p>
@@ -101,7 +115,7 @@ export default function WeatherWidget() {
           </div>
 
           <Button
-            className="text-xs font-medium bg-green-400 dark:bg-green-800"
+            className="text-xs font-medium bg-green-400 dark:bg-green-800 hover:scale-[1.03] cursor-pointer transition-all duration-200 "
             size="sm"
             variant="light"
             onPress={onOpen}
@@ -146,9 +160,12 @@ export default function WeatherWidget() {
             {weather ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {weather.forecast.map((day, i) => (
-                  <div
+                  <motion.div
                     key={i}
-                    className="border rounded-lg p-4 flex flex-col items-center text-center"
+                    animate={{ opacity: 1, y: 0 }}
+                    className="border-2 border-default-200 rounded-xl p-4 flex flex-col items-center text-center "
+                    initial={{ opacity: 0, y: 20 }}
+                    transition={{ delay: i * 0.05, duration: 0.3 }}
                   >
                     <p className="text-sm font-medium">
                       {new Date(day.date).toLocaleDateString("default", {
@@ -168,7 +185,7 @@ export default function WeatherWidget() {
                     <p className="text-sm">
                       🌡️ {day.min}° – {day.max}°
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             ) : (
