@@ -102,74 +102,81 @@ const cardConfig: DashboardCard[] = [
 
 export default function IndexPage() {
   return (
-    <HomeLayout>
-      <section className="flex flex-col items-center justify-center gap-8 px-4">
-        {/* Header + Weather Widget */}
-        <div className="w-full max-w-5xl flex flex-col sm:flex-row justify-between items-center sm:items-start gap-4">
-          <div className="flex-1 mb-8 sm:mb-0">
-            <Header />
-          </div>
-          <div className="hidden sm:block">
-            <WeatherWidget />
-          </div>
-        </div>
+    <>
+      {/* Mobile Fixed WeatherWidget */}
+      <div className="sm:hidden fixed top-2 left-0 right-0 z-50 px-4">
+        <WeatherWidget />
+      </div>
 
-        {/* Animated Dashboard Cards */}
-        <motion.div
-          animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl py-10"
-          initial="hidden"
-          variants={{
-            hidden: {},
-            visible: {
-              transition: { staggerChildren: 0.1 },
-            },
-          }}
-        >
-          {cardConfig.map((card) => {
-            const live = card.useLiveData?.();
+      <HomeLayout>
+        <section className="flex flex-col items-center justify-center gap-8 px-4 pt-16 sm:pt-0">
+          {/* Header + Weather Widget (Desktop) */}
+          <div className="w-full max-w-5xl flex flex-col sm:flex-row justify-between items-center sm:items-start gap-4">
+            <div className="flex-1 mb-8 sm:mb-0">
+              <Header />
+            </div>
+            <div className="hidden sm:block">
+              <WeatherWidget />
+            </div>
+          </div>
 
-            return (
-              <motion.div
-                key={card.title}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-              >
-                <Link className="h-full flex" href={card.path}>
-                  <Card
-                    isHoverable
-                    className="h-full flex-1 min-w-0 rounded-xl shadow-md transition-all duration-200 border-2 border-default-200 hover:shadow-xl hover:scale-[1.02] hover:bg-white/5 cursor-pointer"
-                  >
-                    <CardHeader className="text-xl font-semibold">
-                      <span aria-label={card.title} role="img">
-                        {card.emoji}
-                      </span>{" "}
-                      {card.title}
-                    </CardHeader>
-                    <CardBody className="space-y-2 h-[100px] flex flex-col justify-between">
-                      <p className="text-sm text-default-500">
-                        {card.description}
-                      </p>
-                      {card.useLiveData ? (
-                        live ? (
-                          <p className="text-xs text-default-700 font-medium min-h-[20px]">
-                            {live}
-                          </p>
-                        ) : (
-                          <Skeleton className="h-4 w-1/2 rounded-md" />
-                        )
-                      ) : null}
-                    </CardBody>
-                  </Card>
-                </Link>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </section>
-    </HomeLayout>
+          {/* Animated Dashboard Cards */}
+          <motion.div
+            animate="visible"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl py-10"
+            initial="hidden"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: { staggerChildren: 0.1 },
+              },
+            }}
+          >
+            {cardConfig.map((card) => {
+              const live = card.useLiveData?.();
+
+              return (
+                <motion.div
+                  key={card.title}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  variants={{
+                    hidden: { opacity: 0, y: 30 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                >
+                  <Link className="h-full flex" href={card.path}>
+                    <Card
+                      isHoverable
+                      className="h-full flex-1 min-w-0 rounded-xl shadow-md transition-all duration-200 border-2 border-default-200 hover:shadow-xl hover:scale-[1.02] hover:bg-white/5 cursor-pointer"
+                    >
+                      <CardHeader className="text-xl font-semibold">
+                        <span aria-label={card.title} role="img">
+                          {card.emoji}
+                        </span>{" "}
+                        {card.title}
+                      </CardHeader>
+                      <CardBody className="space-y-2 h-[100px] flex flex-col justify-between">
+                        <p className="text-sm text-default-500">
+                          {card.description}
+                        </p>
+                        {card.useLiveData ? (
+                          live ? (
+                            <p className="text-xs text-default-700 font-medium min-h-[20px]">
+                              {live}
+                            </p>
+                          ) : (
+                            <Skeleton className="h-4 w-1/2 rounded-md" />
+                          )
+                        ) : null}
+                      </CardBody>
+                    </Card>
+                  </Link>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </section>
+      </HomeLayout>
+    </>
   );
 }

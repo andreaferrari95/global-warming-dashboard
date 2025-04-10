@@ -10,7 +10,7 @@ import {
   Button,
   Input,
 } from "@heroui/react";
-import { SearchIcon, LocateIcon } from "lucide-react";
+import { SearchIcon, LocateIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Skeleton } from "@heroui/skeleton";
 
@@ -39,6 +39,7 @@ export default function WeatherWidget() {
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
+  const [expanded, setExpanded] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const fetchWeather = async (cityQuery?: string, useGeolocation = false) => {
@@ -65,9 +66,7 @@ export default function WeatherWidget() {
   }, []);
 
   const handleSearch = () => {
-    if (query.trim()) {
-      fetchWeather(query.trim());
-    }
+    if (query.trim()) fetchWeather(query.trim());
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,60 +75,114 @@ export default function WeatherWidget() {
 
   return (
     <>
-      {/* Inline Mini Widget */}
-      <Card className="bg-transparent shadow-none w-auto p-0 ml-auto border-2 border-default-200 rounded-xl px-3 py-2">
-        <CardBody className="flex flex-col items-center text-center gap-2 p-0">
-          <div className="text-sm">
-            <p className="font-medium text-default-700">Weather</p>
-            {loading ? (
-              <div className="flex flex-col items-center gap-1">
-                <Skeleton className="h-4 w-[120px] rounded-md" />
-                <Skeleton className="h-3 w-[100px] rounded-md" />
-              </div>
-            ) : weather ? (
-              <>
-                <AnimatePresence mode="wait">
-                  <motion.p
-                    key={`${weather.city}-${weather.current.temp}`}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-sm font-semibold flex items-center justify-center gap-1"
-                    exit={{ opacity: 0, y: -8 }}
-                    initial={{ opacity: 0, y: 8 }}
-                    transition={{ duration: 0.3 }}
-                  >
+      {/* 🌐 Fixed Mobile Widget at top */}
+      <div className="fixed top-16 left-0 right-0 z-30 px-4 sm:hidden">
+        <Card className="bg-background border-2 border-default-200 rounded-xl px-3 py-2 shadow-md backdrop-blur-lg">
+          <CardBody className="flex flex-col gap-2 p-0 text-center items-center">
+            <div className="w-full flex justify-between items-center">
+              <p className="font-medium text-default-700 text-sm">🌦️ Weather</p>
+              <Button
+                isIconOnly
+                className="text-default-500"
+                size="sm"
+                variant="light"
+                onPress={() => setExpanded(!expanded)}
+              >
+                {expanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+              </Button>
+            </div>
+
+            <AnimatePresence initial={false}>
+              {expanded && (
+                <motion.div
+                  animate={{ opacity: 1, y: 0 }}
+                  className="w-full"
+                  exit={{ opacity: 0, y: -8 }}
+                  initial={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {loading ? (
+                    <div className="flex flex-col items-center gap-1">
+                      <Skeleton className="h-4 w-[120px] rounded-md" />
+                      <Skeleton className="h-3 w-[100px] rounded-md" />
+                    </div>
+                  ) : weather ? (
+                    <>
+                      <p className="text-sm font-semibold flex items-center justify-center gap-1">
+                        {weather.city} – {weather.current.temp}°C
+                        <img
+                          alt="icon"
+                          className="inline w-5 h-5"
+                          src={`https://www.weatherbit.io/static/img/icons/${weather.current.icon}.png`}
+                        />
+                      </p>
+                      <p className="text-xs text-default-500">
+                        {weather.current.description}
+                      </p>
+                      <Button
+                        className="mt-2 text-xs font-medium bg-green-400 dark:bg-green-800"
+                        size="sm"
+                        variant="light"
+                        onPress={onOpen}
+                      >
+                        Forecast
+                      </Button>
+                    </>
+                  ) : (
+                    <p className="text-xs text-red-500">
+                      {errorMsg || "No data."}
+                    </p>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </CardBody>
+        </Card>
+      </div>
+
+      {/* 💻 Desktop Weather Widget (unchanged) */}
+      <div className="hidden sm:block">
+        <Card className="bg-transparent shadow-none w-auto p-0 ml-auto border-2 border-default-200 rounded-xl px-3 py-2">
+          <CardBody className="flex flex-col items-center text-center gap-2 p-0">
+            <div className="text-sm">
+              <p className="font-medium text-default-700">Weather</p>
+              {loading ? (
+                <div className="flex flex-col items-center gap-1">
+                  <Skeleton className="h-4 w-[120px] rounded-md" />
+                  <Skeleton className="h-3 w-[100px] rounded-md" />
+                </div>
+              ) : weather ? (
+                <>
+                  <p className="text-sm font-semibold flex items-center justify-center gap-1">
                     {weather.city} – {weather.current.temp}°C
-                    <motion.img
-                      key={weather.current.icon}
+                    <img
                       alt="icon"
-                      animate={{ opacity: 1, scale: 1 }}
                       className="inline w-5 h-5"
-                      initial={{ opacity: 0, scale: 0.9 }}
                       src={`https://www.weatherbit.io/static/img/icons/${weather.current.icon}.png`}
-                      transition={{ duration: 0.3 }}
                     />
-                  </motion.p>
-                </AnimatePresence>
-                <p className="text-xs text-default-500">
-                  {weather.current.description}
-                </p>
-              </>
-            ) : (
-              <p className="text-xs text-red-500">{errorMsg || "No data."}</p>
-            )}
-          </div>
+                  </p>
+                  <p className="text-xs text-default-500">
+                    {weather.current.description}
+                  </p>
+                </>
+              ) : (
+                <p className="text-xs text-red-500">{errorMsg || "No data."}</p>
+              )}
+            </div>
 
-          <Button
-            className="text-xs font-medium bg-green-400 dark:bg-green-800 hover:scale-[1.03] cursor-pointer transition-all duration-200 "
-            size="sm"
-            variant="light"
-            onPress={onOpen}
-          >
-            Forecast
-          </Button>
-        </CardBody>
-      </Card>
+            <Button
+              className="text-xs font-medium bg-green-400 dark:bg-green-800 hover:scale-[1.03] cursor-pointer transition-all duration-200"
+              size="sm"
+              variant="light"
+              onPress={onOpen}
+            >
+              Forecast
+            </Button>
+          </CardBody>
+        </Card>
+      </div>
 
-      {/* Modal with Search + Forecast */}
+      {/* 🧾 Modal for Full Forecast */}
       <Modal
         isOpen={isOpen}
         scrollBehavior="inside"
@@ -139,7 +192,6 @@ export default function WeatherWidget() {
         <ModalContent>
           <ModalHeader>7-Day Forecast – {weather?.city}</ModalHeader>
           <ModalBody>
-            {/* Search & Geolocation Controls */}
             <div className="flex items-center gap-2 mb-4">
               <Input
                 placeholder="Search city..."
