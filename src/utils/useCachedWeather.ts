@@ -22,6 +22,7 @@ interface CachedWeatherData {
       min: number;
       max: number;
       icon: string;
+      description: string;
     }[];
   };
 }
@@ -78,6 +79,7 @@ export async function getCachedWeather(
       min: d.min_temp,
       max: d.max_temp,
       icon: d.weather.icon,
+      description: d.weather.description,
     })),
   };
 

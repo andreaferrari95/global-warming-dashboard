@@ -101,10 +101,16 @@ const cardConfig: DashboardCard[] = [
 export default function IndexPage() {
   return (
     <HomeLayout>
-      <section className="flex flex-col items-center justify-center gap-6  px-4">
-        <Header />
-        <WeatherWidget />
+      <section className="flex flex-col items-center justify-center gap-6 px-4">
+        {/* Header and Weather side-by-side on larger screens */}
+        <div className="w-full max-w-5xl flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 items-center text-center">
+          <Header />
+          <div className="w-full sm:w-auto mt-2 sm:mt-0 flex justify-center">
+            <WeatherWidget />
+          </div>
+        </div>
 
+        {/* Dashboard Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
           {cardConfig.map((card) => {
             const live = card.useLiveData?.();

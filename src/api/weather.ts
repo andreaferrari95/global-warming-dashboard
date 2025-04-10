@@ -5,7 +5,10 @@ export interface WeatherbitForecastEntry {
   valid_date: string;
   min_temp: number;
   max_temp: number;
-  weather: { icon: string };
+  weather: {
+    description: any;
+    icon: string;
+  };
 }
 
 export async function fetchCoordinatesByCity(city: string) {

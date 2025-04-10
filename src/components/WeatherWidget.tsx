@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import {
   Card,
-  CardHeader,
   CardBody,
   Modal,
   ModalBody,
@@ -29,6 +28,7 @@ interface WeatherData {
     min: number;
     max: number;
     icon: string;
+    description: string;
   }[];
 }
 
@@ -59,7 +59,7 @@ export default function WeatherWidget() {
   };
 
   useEffect(() => {
-    fetchWeather(undefined, true); // Try geolocation on mount
+    fetchWeather(undefined, true);
   }, []);
 
   const handleSearch = () => {
@@ -73,67 +73,45 @@ export default function WeatherWidget() {
   };
 
   return (
-    <Card className="w-full max-w-xl mx-auto">
-      <CardHeader className="flex justify-between items-center gap-4">
-        <h2 className="text-xl font-semibold">🌦️ Weather</h2>
-        <div className="flex gap-2">
-          <Input
-            aria-label="Search city"
-            placeholder="Search city..."
-            size="sm"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <Button
-            isIconOnly
-            isDisabled={loading}
-            size="sm"
-            onPress={handleSearch}
-          >
-            <SearchIcon size={18} />
-          </Button>
-          <Button
-            isIconOnly
-            aria-label="Use my location"
-            size="sm"
-            variant="bordered"
-            onClick={() => fetchWeather(undefined, true)}
-          >
-            <LocateIcon size={18} />
-          </Button>
-        </div>
-      </CardHeader>
-
-      <CardBody>
-        {loading ? (
-          <p>Loading...</p>
-        ) : weather ? (
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-medium">{weather.city}</h3>
-              <p className="text-sm text-default-500">
-                {weather.current.description}
-              </p>
-            </div>
-            <div className="flex items-center gap-2 text-xl font-bold">
-              <img
-                alt="icon"
-                className="w-8 h-8"
-                src={`https://www.weatherbit.io/static/img/icons/${weather.current.icon}.png`}
-              />
-              {weather.current.temp}°C
-            </div>
-            <Button size="sm" variant="bordered" onPress={onOpen}>
-              Full Forecast
-            </Button>
+    <>
+      {/* Inline Mini Widget */}
+      <Card className="bg-transparent shadow-none w-auto p-0 ml-auto border-2 border-default-200 p py-2 px-2">
+        <CardBody className="flex flex-col items-center text-center gap-2 p-0">
+          <div className="text-sm">
+            <p className="font-medium text-default-700">Weather</p>
+            {loading ? (
+              <p className="text-xs text-default-500">Loading...</p>
+            ) : weather ? (
+              <>
+                <p className="text-sm font-semibold flex items-center justify-center gap-1">
+                  {weather.city} – {weather.current.temp}°C
+                  <img
+                    alt="icon"
+                    className="inline w-5 h-5"
+                    src={`https://www.weatherbit.io/static/img/icons/${weather.current.icon}.png`}
+                  />
+                </p>
+                <p className="text-xs text-default-500">
+                  {weather.current.description}
+                </p>
+              </>
+            ) : (
+              <p className="text-xs text-red-500">{errorMsg || "No data."}</p>
+            )}
           </div>
-        ) : (
-          <p className="text-sm text-red-500">{errorMsg || "No data."}</p>
-        )}
-      </CardBody>
 
-      {/* Modal for full forecast */}
+          <Button
+            className="text-xs font-medium bg-green-400 dark:bg-green-800"
+            size="sm"
+            variant="light"
+            onPress={onOpen}
+          >
+            Forecast
+          </Button>
+        </CardBody>
+      </Card>
+
+      {/* Modal with Search + Forecast */}
       <Modal
         isOpen={isOpen}
         scrollBehavior="inside"
@@ -143,33 +121,62 @@ export default function WeatherWidget() {
         <ModalContent>
           <ModalHeader>7-Day Forecast – {weather?.city}</ModalHeader>
           <ModalBody>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {weather?.forecast.map((day, i) => (
-                <div
-                  key={i}
-                  className="border rounded-lg p-4 flex flex-col items-center"
-                >
-                  <p className="text-sm font-medium">
-                    {new Date(day.date).toLocaleDateString("default", {
-                      weekday: "long",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </p>
-                  <img
-                    alt="icon"
-                    className="w-10 h-10 my-2"
-                    src={`https://www.weatherbit.io/static/img/icons/${day.icon}.png`}
-                  />
-                  <p className="text-sm">
-                    🌡️ {day.min}° – {day.max}°
-                  </p>
-                </div>
-              ))}
+            {/* Search & Geolocation Controls */}
+            <div className="flex items-center gap-2 mb-4">
+              <Input
+                placeholder="Search city..."
+                size="sm"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <Button isIconOnly size="sm" onPress={handleSearch}>
+                <SearchIcon size={18} />
+              </Button>
+              <Button
+                isIconOnly
+                size="sm"
+                variant="bordered"
+                onPress={() => fetchWeather(undefined, true)}
+              >
+                <LocateIcon size={18} />
+              </Button>
             </div>
+
+            {weather ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {weather.forecast.map((day, i) => (
+                  <div
+                    key={i}
+                    className="border rounded-lg p-4 flex flex-col items-center text-center"
+                  >
+                    <p className="text-sm font-medium">
+                      {new Date(day.date).toLocaleDateString("default", {
+                        weekday: "long",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </p>
+                    <img
+                      alt="icon"
+                      className="w-10 h-10 my-2"
+                      src={`https://www.weatherbit.io/static/img/icons/${day.icon}.png`}
+                    />
+                    <p className="text-sm text-default-500 mb-1">
+                      {day.description}
+                    </p>
+                    <p className="text-sm">
+                      🌡️ {day.min}° – {day.max}°
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-red-500">{errorMsg || "No data."}</p>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>
-    </Card>
+    </>
   );
 }
