@@ -38,8 +38,6 @@ This project is part of my **study path at [Start2Impact University](https://www
 
 ## 🧱 Project Architecture
 
-We followed best practices for maintainability and scalability:
-
 ```
 src/
 ├── api/                // API clients (co2, methane, weather etc.)
