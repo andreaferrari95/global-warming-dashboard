@@ -21,9 +21,9 @@ interface DashboardCard {
 
 const cardConfig: DashboardCard[] = [
   {
-    title: "Temperature",
+    title: "Temperatures",
     emoji: "🌡️",
-    path: "/temperature",
+    path: "/temperatures",
     description: "Track global land and ocean temperature anomalies over time.",
     useLiveData: () =>
       useCachedData("live-temperature", async () => {
@@ -35,7 +35,7 @@ const cardConfig: DashboardCard[] = [
       }),
   },
   {
-    title: "CO2",
+    title: "CO₂",
     emoji: "🏭",
     path: "/co2",
     description: "View atmospheric CO₂ concentrations and seasonal trends.",
@@ -105,7 +105,7 @@ export default function IndexPage() {
         {/* Header and Weather side-by-side on larger screens */}
         <div className="w-full max-w-5xl flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 items-center text-center">
           <Header />
-          <div className="w-full sm:w-auto mt-2 sm:mt-0 flex justify-center">
+          <div className="hidden sm:block">
             <WeatherWidget />
           </div>
         </div>
