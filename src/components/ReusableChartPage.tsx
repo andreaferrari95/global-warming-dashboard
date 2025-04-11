@@ -7,6 +7,8 @@ import {
   ResponsiveContainer,
   LineChart,
   Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -15,6 +17,8 @@ import {
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { DownloadIcon } from "lucide-react";
+
+import { useIsMobile } from "@/utils/useIsMobile"; // 👈 import your custom hook
 
 interface ChartEntry {
   label: string;
@@ -65,6 +69,7 @@ export default function ReusableChartPage({
   const [startYear, setStartYear] = useState<number>(defaultStartYear);
   const [loading, setLoading] = useState(true);
   const chartRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile(); // 👈 use the hook here
 
   useEffect(() => {
     const fetch = async () => {
@@ -104,7 +109,7 @@ export default function ReusableChartPage({
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 ">
+    <div className="max-w-5xl mx-auto px-4">
       {loading ? (
         <div className="flex justify-center mt-20">
           <Spinner label="Loading data..." size="lg" />
@@ -137,7 +142,9 @@ export default function ReusableChartPage({
                     }}
                   >
                     {dropdown.options.map((option) => (
-                      <SelectItem key={option.key}>{option.label}</SelectItem>
+                      <SelectItem key={option.key} textValue={option.label}>
+                        {option.label}
+                      </SelectItem>
                     ))}
                   </Select>
                 ))}
@@ -200,45 +207,79 @@ export default function ReusableChartPage({
             {/* Chart block */}
             <div ref={chartRef} className="h-[400px]">
               <ResponsiveContainer height="100%" width="100%">
-                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="label" tick={{ fontSize: 10 }} />
-                  <YAxis
-                    domain={yDomain || ["auto", "auto"]}
-                    tick={{ fontSize: 12 }}
-                    unit={yUnit}
-                  />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "white",
-                      border: "1px solid #e5e7eb",
-                      borderRadius: "0.5rem",
-                      boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                    }}
-                    labelStyle={{
-                      color: "#374151",
-                      fontWeight: 500,
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                  {lineSeries.map((line) => (
-                    <Line
-                      key={line.key}
-                      isAnimationActive
-                      dataKey={line.key}
-                      dot={false}
-                      stroke={line.color}
-                      strokeDasharray={line.strokeDasharray}
-                      strokeWidth={2}
-                      type="monotone"
+                {isMobile ? (
+                  <BarChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" tick={{ fontSize: 10 }} />
+                    <YAxis
+                      domain={yDomain || ["auto", "auto"]}
+                      tick={{ fontSize: 12 }}
+                      unit={yUnit}
                     />
-                  ))}
-                </LineChart>
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "white",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                      }}
+                      labelStyle={{
+                        color: "#374151",
+                        fontWeight: 500,
+                        fontSize: "0.875rem",
+                      }}
+                    />
+                    {lineSeries.map((series) => (
+                      <Bar
+                        key={series.key}
+                        barSize={20}
+                        dataKey={series.key}
+                        fill={series.color}
+                        name={series.name}
+                      />
+                    ))}
+                  </BarChart>
+                ) : (
+                  <LineChart data={data}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="label" tick={{ fontSize: 10 }} />
+                    <YAxis
+                      domain={yDomain || ["auto", "auto"]}
+                      tick={{ fontSize: 12 }}
+                      unit={yUnit}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "white",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                      }}
+                      labelStyle={{
+                        color: "#374151",
+                        fontWeight: 500,
+                        fontSize: "0.875rem",
+                      }}
+                    />
+                    {lineSeries.map((line) => (
+                      <Line
+                        key={line.key}
+                        isAnimationActive
+                        dataKey={line.key}
+                        dot={false}
+                        stroke={line.color}
+                        strokeDasharray={line.strokeDasharray}
+                        strokeWidth={2}
+                        type="monotone"
+                      />
+                    ))}
+                  </LineChart>
+                )}
               </ResponsiveContainer>
             </div>
           </Card>
 
-          {/* ✍️ Extra info below chart */}
+          {/* Info below the chart */}
           {children && (
             <div className="mt-6 text-sm text-default-600 leading-relaxed space-y-4 mb-5">
               {children}
