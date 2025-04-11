@@ -13,13 +13,20 @@ This project is part of my **study path at [Start2Impact University](https://www
   - Atmospheric **CO₂**, **CH₄ (Methane)**, and **N₂O (Nitrous Oxide)**
   - **Polar sea ice** extent
 
-- 🌦️ Live weather widget with 7-day forecast
+- 🌦️ Live weather widget with 7-day forecast (collapsible on mobile)
 - ⚡ Powered by modern APIs and updated datasets
-- 🧭 Easy navigation and mobile-first responsive layout
-- 🌈 Light animations & skeleton loaders for a polished UX
-- 📤 Export charts as PNG or PDF
-- 💡 Built using best practices in component structure and data handling
+- 📱 Responsive design with mobile-first adaptations:
+  - 🔁 **Switches to bar charts** on small screens for better readability
+- 🧭 Intuitive navigation with a clean Hero UI interface
+- 🧠 Smart caching to reduce redundant API calls
+- 🌈 Smooth animations & loading skeletons for a polished UX
+- 📤 Export any chart as **PNG** or **PDF**
+- 💡 Built using best practices in structure and performance
 
+---
+## ⚠️ Note on Weather Widget
+
+The weather widget uses the **Weatherbit API**, which has a **daily request limit of 50 calls** (free tier). If the forecast is not visible, the limit may have been reached for the day. The rest of the dashboard continues to function normally.
 ---
 
 ## 🛠️ Tech Stack
@@ -33,6 +40,7 @@ This project is part of my **study path at [Start2Impact University](https://www
 | **Tailwind CSS** | Utility-first styling (via Hero UI) |
 | **Weatherbit API** | Real-time weather data |
 | **Global Warming API** | Climate metrics and historical datasets |
+| **html2canvas / jsPDF** | Export functionality (PNG, PDF) |
 
 ---
 
@@ -50,11 +58,14 @@ src/
 
 ### ✅ Highlights:
 - API calls abstracted in `api/` modules (not directly in components)
-- Functional components and React Hooks only
-- Each component in its own folder (logic + optional styles)
-- Skeletons and loading states using Hero UI
-- Mobile-first responsiveness and conditional rendering
+- Functional components only with Hooks
+- Each component in its own folder (logic + styles)
+- Skeletons and animated loading states via Hero UI
+- Responsive design with **mobile chart adaptation**
 - Collapsible **weather widget** for small screens
+- Custom hooks:
+  - `useCachedData` for caching API results
+  - `useIsMobile` for responsive behavior
 
 ---
 
@@ -102,7 +113,8 @@ If using **Netlify**:
 3. Set build command to `npm run build`
 4. Set publish directory to `dist`
 5. Add the env variable `VITE_WEATHERBIT_API_KEY` in Netlify settings
-6. Deploy!
+6. Ensure proper SPA routing with a _redirects file: `/*    /index.html   200`
+7. Deploy!
 
 ---
 
