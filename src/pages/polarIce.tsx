@@ -41,7 +41,7 @@ export default function PolarIcePage() {
   return (
     <HomeLayout>
       {loading || !rawData ? (
-        <div className="max-w-5xl mx-auto w-full px-4 py-12">
+        <div className="max-w-5xl mx-auto w-full px-4 ">
           <Skeleton className="h-10 w-64 mb-4" />
           <Skeleton className="h-4 w-full max-w-xl mb-6" />
           <Skeleton className="h-96 w-full rounded-xl" />
@@ -81,7 +81,40 @@ export default function PolarIcePage() {
           yDomain={[15, 30]}
           yUnit=" M km²"
           yearRange={[1990, currentYear]}
-        />
+        >
+          <div className="mt-6 text-sm text-default-600 leading-relaxed space-y-4">
+            <h2 className="text-lg font-semibold text-default-800">
+              📘 How to read the chart
+            </h2>
+            <p>
+              Sea ice plays a crucial role in regulating Earth’s climate by
+              reflecting solar radiation and maintaining global temperature
+              balance. Declining polar ice is one of the clearest indicators of
+              climate change.
+            </p>
+            <p>
+              The <strong>🔵 Observed Ice Extent</strong> line shows how much
+              sea ice was recorded globally across both the Arctic and Antarctic
+              regions in a given month.
+            </p>
+            <p>
+              The <strong>⚪ Monthly Mean</strong> represents the average sea
+              ice extent for the same month over the period 1991–2020, serving
+              as a historical baseline.
+            </p>
+            <p>
+              Use the starting year dropdown to explore long-term trends. If the
+              blue line frequently falls below the gray line, it suggests a
+              long-term reduction in sea ice extent compared to historical
+              norms.
+            </p>
+            <p className="italic text-default-500">
+              Polar regions are warming nearly four times faster than the global
+              average. Tracking changes in sea ice helps scientists understand
+              broader impacts like rising sea levels and shifting ecosystems.
+            </p>
+          </div>
+        </ReusableChartPage>
       )}
     </HomeLayout>
   );

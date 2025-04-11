@@ -43,7 +43,7 @@ export default function MethanePage() {
   return (
     <HomeLayout>
       {loading || !rawData ? (
-        <div className="max-w-5xl mx-auto w-full px-4 py-12">
+        <div className="max-w-5xl mx-auto w-full px-4 ">
           <Skeleton className="h-10 w-64 mb-4" />
           <Skeleton className="h-4 w-full max-w-xl mb-6" />
           <Skeleton className="h-96 w-full rounded-xl" />
@@ -83,7 +83,39 @@ export default function MethanePage() {
           yDomain={[1600, 2000]}
           yUnit=" ppb"
           yearRange={[1985, currentYear]}
-        />
+        >
+          <div className="mt-6 text-sm text-default-600 leading-relaxed space-y-4">
+            <h2 className="text-lg font-semibold text-default-800">
+              📘 How to read the chart
+            </h2>
+            <p>
+              Methane (<strong>CH₄</strong>) is a potent greenhouse gas with a
+              warming potential over 80 times stronger than CO₂ over a 20-year
+              period. This chart tracks its concentration in the atmosphere over
+              time.
+            </p>
+            <p>
+              <strong>🔴 Trend</strong> shows the long-term progression of
+              methane levels, smoothed to highlight the overall growth pattern
+              without short-term noise.
+            </p>
+            <p>
+              <strong>⚪ Average</strong> includes more granular, possibly
+              seasonal variation, reflecting the natural and human sources of
+              CH₄ (like agriculture and fossil fuel extraction).
+            </p>
+            <p>
+              Use the dropdown above to adjust the start year and explore how
+              methane levels have changed. You can also export the chart for use
+              in presentations or reports.
+            </p>
+            <p className="italic text-default-500">
+              Methane’s rise is concerning due to its rapid warming impact —
+              though it degrades faster than CO₂, reducing emissions now could
+              slow short-term warming.
+            </p>
+          </div>
+        </ReusableChartPage>
       )}
     </HomeLayout>
   );

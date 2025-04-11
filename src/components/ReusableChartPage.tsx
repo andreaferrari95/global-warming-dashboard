@@ -44,6 +44,7 @@ interface ReusableChartPageProps {
     options: { key: string; label: string }[];
     onChange: (key: string) => void;
   }[];
+  children?: React.ReactNode;
 }
 
 export default function ReusableChartPage({
@@ -57,7 +58,8 @@ export default function ReusableChartPage({
   lineSeries,
   defaultStartYear,
   yearRange,
-  extraDropdowns = [], // ⬅️ new default
+  children,
+  extraDropdowns = [],
 }: ReusableChartPageProps) {
   const [data, setData] = useState<ChartEntry[]>([]);
   const [startYear, setStartYear] = useState<number>(defaultStartYear);
@@ -102,142 +104,147 @@ export default function ReusableChartPage({
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
+    <div className="max-w-5xl mx-auto px-4 ">
       {loading ? (
         <div className="flex justify-center mt-20">
           <Spinner label="Loading data..." size="lg" />
         </div>
       ) : (
-        <Card className="p-6">
-          {/* Title + Description + Dropdowns */}
-          <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h1 className="text-2xl font-semibold">{title}</h1>
-              <p className="text-sm text-default-500 mt-1 max-w-xl">
-                {description}
-              </p>
-            </div>
+        <>
+          <Card className="p-6">
+            {/* Header and dropdowns */}
+            <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div>
+                <h1 className="text-2xl font-semibold">{title}</h1>
+                <p className="text-sm text-default-500 mt-1 max-w-xl">
+                  {description}
+                </p>
+              </div>
 
-            <div className="flex gap-2 flex-wrap">
-              {extraDropdowns.map((dropdown) => (
+              <div className="flex gap-2 flex-wrap">
+                {extraDropdowns.map((dropdown) => (
+                  <Select
+                    key={dropdown.label}
+                    className="w-[130px] text-gray-800"
+                    label={dropdown.label}
+                    selectedKeys={[dropdown.selectedKey]}
+                    size="sm"
+                    variant="bordered"
+                    onSelectionChange={(keys) => {
+                      const selected = Array.from(keys)[0];
+
+                      dropdown.onChange(String(selected));
+                    }}
+                  >
+                    {dropdown.options.map((option) => (
+                      <SelectItem key={option.key}>{option.label}</SelectItem>
+                    ))}
+                  </Select>
+                ))}
                 <Select
-                  key={dropdown.label}
                   className="w-[130px] text-gray-800"
-                  label={dropdown.label}
-                  selectedKeys={[dropdown.selectedKey]}
+                  label="Starting year"
+                  selectedKeys={[startYear.toString()]}
                   size="sm"
                   variant="bordered"
                   onSelectionChange={(keys) => {
                     const selected = Array.from(keys)[0];
 
-                    dropdown.onChange(String(selected));
+                    if (selected) setStartYear(parseInt(String(selected)));
                   }}
                 >
-                  {dropdown.options.map((option) => (
-                    <SelectItem key={option.key} textValue={option.label}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
+                  {[...Array(yearRange[1] - yearRange[0] + 1)].map((_, i) => {
+                    const year = yearRange[0] + i;
+
+                    return (
+                      <SelectItem
+                        key={year.toString()}
+                        textValue={year.toString()}
+                      >
+                        {year}
+                      </SelectItem>
+                    );
+                  })}
                 </Select>
-              ))}
-
-              {/* Start year dropdown */}
-              <Select
-                className="w-[130px] text-gray-800"
-                label="Starting year"
-                selectedKeys={[startYear.toString()]}
-                size="sm"
-                variant="bordered"
-                onSelectionChange={(keys) => {
-                  const selected = Array.from(keys)[0];
-
-                  if (selected) setStartYear(parseInt(String(selected)));
-                }}
-              >
-                {[...Array(yearRange[1] - yearRange[0] + 1)].map((_, i) => {
-                  const year = yearRange[0] + i;
-
-                  return (
-                    <SelectItem
-                      key={year.toString()}
-                      textValue={year.toString()}
-                    >
-                      {year}
-                    </SelectItem>
-                  );
-                })}
-              </Select>
-            </div>
-          </div>
-
-          {/* Latest reading + Export */}
-          <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            {data.length > 0 && (
-              <div className="text-sm text-default-500">
-                <p>
-                  📅 Latest reading:{" "}
-                  <span className="font-semibold text-default-800">
-                    {data.at(-1)?.label}
-                  </span>
-                </p>
-                <p>{getLatestText(data.at(-1)!)}</p>
               </div>
-            )}
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                startContent={<DownloadIcon size={16} />}
-                variant="bordered"
-                onPress={handleExportPNG}
-              >
-                Export PNG
-              </Button>
-              <Button size="sm" variant="bordered" onPress={handleExportPDF}>
-                Export PDF
-              </Button>
             </div>
-          </div>
 
-          {/* Chart */}
-          <div ref={chartRef} className="h-[400px]">
-            <ResponsiveContainer height="100%" width="100%">
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="label" tick={{ fontSize: 10 }} />
-                <YAxis
-                  domain={yDomain || ["auto", "auto"]}
-                  tick={{ fontSize: 12 }}
-                  unit={yUnit}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "white",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "0.5rem",
-                    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                  }}
-                  labelStyle={{
-                    color: "#374151",
-                    fontWeight: 500,
-                    fontSize: "0.875rem",
-                  }}
-                />
-                {lineSeries.map((line) => (
-                  <Line
-                    key={line.key}
-                    isAnimationActive
-                    dataKey={line.key}
-                    dot={false}
-                    stroke={line.color}
-                    strokeDasharray={line.strokeDasharray}
-                    strokeWidth={2}
-                    type="monotone"
+            {/* Latest reading and export */}
+            <div className="mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              {data.length > 0 && (
+                <div className="text-sm text-default-500">
+                  <p>
+                    📅 Latest reading:{" "}
+                    <span className="font-semibold text-default-800">
+                      {data.at(-1)?.label}
+                    </span>
+                  </p>
+                  <p>{getLatestText(data.at(-1)!)}</p>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  startContent={<DownloadIcon size={16} />}
+                  variant="bordered"
+                  onPress={handleExportPNG}
+                >
+                  Export PNG
+                </Button>
+                <Button size="sm" variant="bordered" onPress={handleExportPDF}>
+                  Export PDF
+                </Button>
+              </div>
+            </div>
+
+            {/* Chart block */}
+            <div ref={chartRef} className="h-[400px]">
+              <ResponsiveContainer height="100%" width="100%">
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="label" tick={{ fontSize: 10 }} />
+                  <YAxis
+                    domain={yDomain || ["auto", "auto"]}
+                    tick={{ fontSize: 12 }}
+                    unit={yUnit}
                   />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </Card>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "white",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "0.5rem",
+                      boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+                    }}
+                    labelStyle={{
+                      color: "#374151",
+                      fontWeight: 500,
+                      fontSize: "0.875rem",
+                    }}
+                  />
+                  {lineSeries.map((line) => (
+                    <Line
+                      key={line.key}
+                      isAnimationActive
+                      dataKey={line.key}
+                      dot={false}
+                      stroke={line.color}
+                      strokeDasharray={line.strokeDasharray}
+                      strokeWidth={2}
+                      type="monotone"
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+
+          {/* ✍️ Extra info below chart */}
+          {children && (
+            <div className="mt-6 text-sm text-default-600 leading-relaxed space-y-4 mb-5">
+              {children}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

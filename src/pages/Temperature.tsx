@@ -52,7 +52,7 @@ export default function TemperaturesPage() {
   return (
     <HomeLayout>
       {loading || !rawData ? (
-        <div className="max-w-5xl mx-auto w-full px-4 py-12">
+        <div className="max-w-5xl mx-auto w-full px-4 ">
           <Skeleton className="h-10 w-60 mb-4" />
           <Skeleton className="h-4 w-full max-w-xl mb-6" />
           <Skeleton className="h-96 w-full rounded-xl" />
@@ -110,7 +110,37 @@ export default function TemperaturesPage() {
           title="🌡️ Global Temperature Data"
           yUnit="°C"
           yearRange={[1950, new Date().getFullYear()]}
-        />
+        >
+          {/* Detailed interpretation section */}
+          <div className="mt-6 space-y-3 text-sm text-default-600">
+            <h2 className="text-lg font-semibold text-default-800">
+              📘 How to read the chart
+            </h2>
+            <p>
+              This chart displays <strong>temperature anomalies</strong>, which
+              measure how much warmer or cooler a time period was compared to a
+              historical baseline. A value of <code>+0.50°C</code> indicates a
+              temperature that was half a degree Celsius above the long-term
+              average.
+            </p>
+            <p>
+              Use the <strong>Data type</strong> dropdown to toggle between{" "}
+              <strong className="text-green-600">land</strong> and{" "}
+              <strong className="text-blue-600">ocean</strong> datasets. Land
+              data is recorded monthly and is more variable, while ocean data is
+              aggregated yearly and reflects slower, but significant, trends.
+            </p>
+            <p>
+              Adjust the <strong>Starting year</strong> filter to focus on more
+              recent decades or long-term historical patterns. This helps reveal
+              how quickly the Earth has warmed in recent years.
+            </p>
+            <p>
+              You can also export the chart as a <code>PNG</code> image or{" "}
+              <code>PDF</code> document using the buttons above.
+            </p>
+          </div>
+        </ReusableChartPage>
       )}
     </HomeLayout>
   );

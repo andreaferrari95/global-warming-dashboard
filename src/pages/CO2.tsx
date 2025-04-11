@@ -40,7 +40,7 @@ export default function Co2Page() {
   return (
     <HomeLayout>
       {loading || !rawData ? (
-        <div className="max-w-5xl mx-auto w-full px-4 py-12">
+        <div className="max-w-5xl mx-auto w-full px-4 ">
           <Skeleton className="h-10 w-64 mb-4" />
           <Skeleton className="h-4 w-full max-w-xl mb-6" />
           <Skeleton className="h-96 w-full rounded-xl" />
@@ -79,7 +79,37 @@ export default function Co2Page() {
           title="💨 Atmospheric CO₂ Levels"
           yUnit=" ppm"
           yearRange={[2015, new Date().getFullYear()]}
-        />
+        >
+          <div className="mt-6 text-sm text-default-600 leading-relaxed space-y-4">
+            <h2 className="text-lg font-semibold text-default-800">
+              📘 How to read the chart
+            </h2>
+            <p>
+              This chart visualizes the amount of <strong>CO₂</strong> (carbon
+              dioxide) in the atmosphere measured at Mauna Loa Observatory. It’s
+              one of the most reliable datasets for tracking global emissions.
+            </p>
+            <p>
+              <strong>🔴 Trend</strong> (red line) represents the long-term
+              smoothed CO₂ concentration, filtering out short-term variations.
+              It reveals the steady rise due to fossil fuel emissions.
+            </p>
+            <p>
+              <strong>⚪ Cycle</strong> (gray dashed line) shows the seasonal
+              fluctuations caused by the natural carbon cycle (like plants
+              absorbing CO₂ during growing seasons).
+            </p>
+            <p>
+              You can change the starting year above to focus on recent or
+              historic periods. Hover over the chart to inspect specific data
+              points, or export the chart to share it.
+            </p>
+            <p className="italic text-default-500">
+              Note: Pre-industrial CO₂ levels were ~280 ppm. We&apos;re now over
+              420 ppm – a significant driver of climate change.
+            </p>
+          </div>
+        </ReusableChartPage>
       )}
     </HomeLayout>
   );

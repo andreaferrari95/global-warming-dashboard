@@ -43,7 +43,7 @@ export default function NitrousPage() {
   return (
     <HomeLayout>
       {loading || !rawData ? (
-        <div className="max-w-5xl mx-auto w-full px-4 py-12">
+        <div className="max-w-5xl mx-auto w-full px-4">
           <Skeleton className="h-10 w-64 mb-4" />
           <Skeleton className="h-4 w-full max-w-xl mb-6" />
           <Skeleton className="h-96 w-full rounded-xl" />
@@ -83,7 +83,38 @@ export default function NitrousPage() {
           yDomain={[310, 345]}
           yUnit=" ppb"
           yearRange={[2002, currentYear]}
-        />
+        >
+          <div className="mt-6 text-sm text-default-600 leading-relaxed space-y-4">
+            <h2 className="text-lg font-semibold text-default-800">
+              📘 How to read the chart
+            </h2>
+            <p>
+              Nitrous oxide (<strong>N₂O</strong>) is a powerful greenhouse gas,
+              contributing to both global warming and the depletion of the ozone
+              layer. Its emissions primarily come from agricultural activities,
+              including fertilizer use.
+            </p>
+            <p>
+              <strong>🔴 Trend</strong> shows the smoothed, long-term
+              progression of N₂O levels, helping to reveal the persistent rise
+              due to human activity.
+            </p>
+            <p>
+              <strong>⚪ Average</strong> captures more short-term variations,
+              which may reflect natural fluctuations and measurement cycles.
+            </p>
+            <p>
+              You can change the starting year to explore how nitrous oxide
+              levels have evolved. Export buttons above the chart let you
+              download your custom view.
+            </p>
+            <p className="italic text-default-500">
+              Although N₂O is present in smaller quantities than CO₂ or CH₄, its
+              impact is long-lasting. Monitoring its levels is essential for
+              climate mitigation strategies.
+            </p>
+          </div>
+        </ReusableChartPage>
       )}
     </HomeLayout>
   );
